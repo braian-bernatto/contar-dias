@@ -3,6 +3,7 @@ import React from 'react';
 import { css } from '@emotion/react';
 import Toggle from './Toggle';
 
+
 const DiasCorridos = () => {
   return (
     <div className='w-80 bg-white rounded-xl p-5 flex flex-wrap justify-center items-center gap-4 shadow-xl'>
