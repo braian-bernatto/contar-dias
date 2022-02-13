@@ -135,7 +135,7 @@ const CalcularFecha = ({ fechas }) => {
   }, [diasHabilesToggle])
 
   return (
-    <div className='relative w-80 bg-white text-md rounded-xl p-5 flex flex-wrap justify-center items-center gap-4 shadow-xl'>
+    <div className='relative w-80 sm:w-3/5 md:w-80 bg-white text-md rounded-xl p-5 flex flex-wrap justify-center items-center gap-4 shadow-xl'>
       <button
         onClick={() => {
           setVistaFecha(!vistaFecha)
@@ -192,18 +192,63 @@ const CalcularFecha = ({ fechas }) => {
             <label htmlFor='plazo' className='mr-2 border-b-2 border-teal-600'>
               Días de plazo
             </label>
-            <input
-              id='plazo'
-              type='number'
-              className='w-40 text-center text-4xl font-bold p-2 text-pink-800 focus:outline-none'
-              value={plazoDias}
-              onChange={e => {
-                setPlazoDias(parseInt(e.target.value))
-                diasHabilesToggle
-                  ? diasHabiles(fechaInicio, e.target.value, listaFeriados)
-                  : diasCorridos(fechaInicio, parseInt(e.target.value))
-              }}
-            />
+            <div className='flex items-center'>
+              <input
+                id='plazo'
+                type='number'
+                className='w-36 text-center text-4xl font-bold p-2 text-pink-800 focus:outline-none'
+                value={plazoDias}
+                onChange={e => {
+                  setPlazoDias(parseInt(e.target.value))
+                  diasHabilesToggle
+                    ? diasHabiles(fechaInicio, e.target.value, listaFeriados)
+                    : diasCorridos(fechaInicio, parseInt(e.target.value))
+                }}
+              />
+
+              <div className='flex flex-col justify-between gap-3 text-teal-700'>
+                <button
+                  onClick={() => {
+                    setPlazoDias(plazoDias + 1)
+                  }}
+                >
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    className='h-6 w-6'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth={5}
+                      d='M5 15l7-7 7 7'
+                    />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => {
+                    setPlazoDias(plazoDias - 1)
+                  }}
+                >
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    className='h-6 w-6'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth={5}
+                      d='M19 9l-7 7-7-7'
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
           </div>
           <div className='w-full flex flex-wrap justify-center shadow-xl place-items-center rounded-xl border text-white'>
             <label

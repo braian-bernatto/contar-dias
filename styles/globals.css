@@ -20,3 +20,8 @@ input:checked ~ .dot {
   transform: translateX(100%);
   background-color: #29b5a8;
 }
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
