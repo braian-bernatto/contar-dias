@@ -29,7 +29,7 @@ export default function Home({ fechas }) {
       </Head>
       <div className='container mx-auto'>
         <header className='flex justify-center items-center mb-7'>
-          <h1 className='text-teal-600 text-2xl font-bold mt-5'>
+          <h1 className='text-teal-600 text-md font-bold mt-5 bg-white text-center px-4 rounded-xl shadow-lg border-r-4 border-l-4 border-teal-600 border-t border-b'>
             Calcular Días
           </h1>
         </header>
@@ -41,7 +41,9 @@ export default function Home({ fechas }) {
       </div>
 
       <footer className='flex flex-wrap justify-center items-center mt-5'>
-        <span className='text-xs text-gray-800 font-bold'>by Bernatto</span>
+        <span className='text-xs text-gray-800 font-bold animate-pulse'>
+          by Bernatto
+        </span>
       </footer>
     </div>
   )
