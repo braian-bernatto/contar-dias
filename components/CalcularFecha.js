@@ -10,7 +10,9 @@ const CalcularFecha = ({ fechas }) => {
   const [diasHabilesToggle, setDiasHabilesToggle] = useState(false)
   const [vistaFecha, setVistaFecha] = useState(true)
   const [plazoDias, setPlazoDias] = useState(0)
-  const [fechaInicio, setFechaInicio] = useState('')
+  const [fechaInicio, setFechaInicio] = useState(
+    new Date().toLocaleDateString('en-CA')
+  )
   const [fechaFin, setFechaFin] = useState('')
   const [fechaTope, setFechaTope] = useState('')
   const [restaDias, setRestaDias] = useState(0)
