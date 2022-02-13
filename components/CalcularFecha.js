@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import Toggle from './Toggle'
-import { parseISO, differenceInDays, differenceInCalendarDays } from 'date-fns'
+import { parseISO, differenceInCalendarDays } from 'date-fns'
 
 const CalcularFecha = ({ fechas }) => {
   const listaFeriados = fechas.data.map(fecha => fecha.attributes.fecha)
@@ -66,12 +66,17 @@ const CalcularFecha = ({ fechas }) => {
 
   // total dias
   const calcularTotalDias = (inicio, fin) => {
-    if (!diasHabilesToggle) {
-      setTotalDias(
-        Math.abs(differenceInCalendarDays(parseISO(fin), parseISO(inicio))) + 1
-      )
+    if (inicio.length > 0 && fin.length > 0) {
+      if (!diasHabilesToggle) {
+        setTotalDias(
+          Math.abs(differenceInCalendarDays(parseISO(fin), parseISO(inicio))) +
+            1
+        )
+      } else {
+        diasHabilesV2(inicio, fin)
+      }
     } else {
-      diasHabilesV2(inicio, fin)
+      setTotalDias(0)
     }
   }
 
@@ -175,8 +180,7 @@ const CalcularFecha = ({ fechas }) => {
             calcularTotalDias(fechaFin, e.target.value)
             diasHabilesToggle
               ? diasHabiles(e.target.value, plazoDias, listaFeriados)
-              : (diasCorridos(e.target.value, plazoDias),
-                setTotalDias(e.target.value, fechaFin))
+              : diasCorridos(e.target.value, plazoDias)
           }}
         />
       </div>
