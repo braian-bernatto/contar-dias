@@ -132,7 +132,7 @@ const CalcularFecha = ({ fechas }) => {
       ? diasHabiles(fechaInicio, plazoDias, listaFeriados)
       : diasCorridos(fechaInicio, plazoDias)
     !vistaFecha ? calcularTotalDias(fechaInicio, fechaFin) : ''
-  }, [diasHabilesToggle])
+  }, [diasHabilesToggle, plazoDias])
 
   return (
     <div className='relative w-80 sm:w-3/5 md:w-80 bg-white text-md rounded-xl p-5 flex flex-wrap justify-center items-center gap-4 shadow-xl'>
