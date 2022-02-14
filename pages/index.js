@@ -41,9 +41,7 @@ export default function Home({ fechas }) {
       </div>
 
       <footer className='flex flex-wrap justify-center items-center mt-5'>
-        <span className='text-xs text-gray-800 font-bold'>
-          by Bernatto
-        </span>
+        <span className='text-xs text-gray-500 font-bold'>by Bernatto</span>
       </footer>
     </div>
   )
