@@ -162,7 +162,7 @@ const CalcularFecha = ({ fechas }) => {
         id='titulo'
         className='w-full rounded-full bg-teal-600 text-white text-sm text-center font-semibold py-1'
       >
-        DÍAS CORRIDOS
+        {diasHabilesToggle ? 'DÍAS HÁBILES' : 'DÍAS CORRIDOS'}
       </h1>
       <Toggle setDiasHabilesToggle={setDiasHabilesToggle} />
       <div className='w-full flex justify-between place-items-center'>
