@@ -4,6 +4,7 @@ import CalcularFecha from '../components/CalcularFecha'
 import Feriados from '../components/Feriados'
 import clienteAxios from '../config/axios'
 
+// can't use this option because strapi takes more than 10 seconds to start on heroku which causes an error message on the app
 // export const getServerSideProps = async () => {
 //   const res = await clienteAxios.get(`/api/feriados`)
 //   return {
