@@ -179,7 +179,7 @@ const CalcularFecha = ({ fechas }) => {
           value={fechaInicio}
           onChange={e => {
             setFechaInicio(e.target.value)
-            calcularTotalDias(fechaFin, e.target.value)
+            !vistaFecha ? calcularTotalDias(e.target.value, fechaFin) : null
             diasHabilesToggle
               ? diasHabiles(e.target.value, plazoDias, listaFeriados)
               : diasCorridos(e.target.value, plazoDias)
