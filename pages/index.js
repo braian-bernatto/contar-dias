@@ -1,18 +1,29 @@
 import Head from 'next/head'
+import { useEffect, useState } from 'react'
 import CalcularFecha from '../components/CalcularFecha'
 import Feriados from '../components/Feriados'
 import clienteAxios from '../config/axios'
 
-export const getServerSideProps = async () => {
-  const res = await clienteAxios.get(`/api/feriados`)
-  return {
-    props: {
-      fechas: res.data
-    }
-  }
-}
+// export const getServerSideProps = async () => {
+//   const res = await clienteAxios.get(`/api/feriados`)
+//   return {
+//     props: {
+//       fechas: res.data
+//     }
+//   }
+// }
 
-export default function Home({ fechas }) {
+export default function Home() {
+  const [fechas, setFechas] = useState([])
+  useEffect(async () => {
+    try {
+      const res = await clienteAxios.get(`/api/feriados`)
+      setFechas(res.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }, [])
+
   return (
     <div className='min-h-screen bg-gray-200'>
       <Head>
@@ -35,8 +46,14 @@ export default function Home({ fechas }) {
         </header>
 
         <main className='flex flex-col items-center mt-2 gap-4'>
-          <CalcularFecha fechas={fechas} />
-          <Feriados fechas={fechas} />
+          {fechas.data ? (
+            <CalcularFecha fechas={fechas} />
+          ) : (
+            <div className='relative w-8 h-8 bg-pink-700 absolute rounded-full flex justify-center items-center opacity-70 my-5'>
+              <span className='animate-ping w-8 h-8 bg-pink-700 rounded-full'></span>
+            </div>
+          )}
+          {fechas.data ? <Feriados fechas={fechas} /> : null}
         </main>
       </div>
 
