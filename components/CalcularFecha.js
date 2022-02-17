@@ -37,33 +37,65 @@ const CalcularFecha = ({ fechas }) => {
     let year = ''
     let bandera = false
 
-    while (count < dias) {
-      bandera = true
-      fechaFinal = new Date(fechaFinal.setDate(fechaFinal.getDate() + 1))
+    if (dias > 0) {
+      // dias positivos
+      while (count < dias) {
+        bandera = true
+        fechaFinal = new Date(fechaFinal.setDate(fechaFinal.getDate() + 1))
 
-      year = fechaFinal.getFullYear()
-      month = fechaFinal.getMonth() + 1 //Months are zero based
-      date = fechaFinal.getDate()
+        year = fechaFinal.getFullYear()
+        month = fechaFinal.getMonth() + 1 //Months are zero based
+        date = fechaFinal.getDate()
 
-      let date1 = year + '/' + month + '/' + date
+        let date1 = year + '/' + month + '/' + date
 
-      feriados.forEach(day => {
-        year = parseISO(day).getFullYear()
-        month = parseISO(day).getMonth() + 1 //Months are zero based
-        date = parseISO(day).getDate()
+        feriados.forEach(day => {
+          year = parseISO(day).getFullYear()
+          month = parseISO(day).getMonth() + 1 //Months are zero based
+          date = parseISO(day).getDate()
 
-        let date2 = year + '/' + month + '/' + date
+          let date2 = year + '/' + month + '/' + date
 
-        if (
-          fechaFinal.getDay() === 0 ||
-          fechaFinal.getDay() === 6 ||
-          date1 === date2
-        ) {
-          bandera = false
-        }
-      })
-      bandera ? count++ : null
-    }
+          if (
+            fechaFinal.getDay() === 0 ||
+            fechaFinal.getDay() === 6 ||
+            date1 === date2
+          ) {
+            bandera = false
+          }
+        })
+        bandera ? count++ : null
+      }
+    } else if (dias < 0)
+      // dias negativos
+      while (count < Math.abs(dias)) {
+        bandera = true
+        fechaFinal = new Date(fechaFinal.setDate(fechaFinal.getDate() - 1))
+
+        year = fechaFinal.getFullYear()
+        month = fechaFinal.getMonth() + 1 //Months are zero based
+        date = fechaFinal.getDate()
+
+        let date1 = year + '/' + month + '/' + date
+
+        feriados.forEach(day => {
+          year = parseISO(day).getFullYear()
+          month = parseISO(day).getMonth() + 1 //Months are zero based
+          date = parseISO(day).getDate()
+
+          let date2 = year + '/' + month + '/' + date
+
+          if (
+            fechaFinal.getDay() === 0 ||
+            fechaFinal.getDay() === 6 ||
+            date1 === date2
+          ) {
+            bandera = false
+          }
+        })
+        bandera ? count++ : null
+      }
+
     setFechaTope(fechaFinal.toLocaleDateString('en-CA'))
     setRestaDias(differenceInCalendarDays(fechaFinal, new Date()))
   }
@@ -97,35 +129,68 @@ const CalcularFecha = ({ fechas }) => {
     let year = ''
     let bandera = true
 
-    while (count < totalDias) {
-      bandera = true
-      if (count > 0)
-        fechaActual = new Date(fechaActual.setDate(fechaActual.getDate() + 1))
+    if (fechaInicio < fechaFin) {
+      while (count < totalDias) {
+        bandera = true
+        if (count > 0)
+          fechaActual = new Date(fechaActual.setDate(fechaActual.getDate() + 1))
 
-      year = fechaActual.getFullYear()
-      month = fechaActual.getMonth() + 1 //Months are zero based
-      date = fechaActual.getDate()
+        year = fechaActual.getFullYear()
+        month = fechaActual.getMonth() + 1 //Months are zero based
+        date = fechaActual.getDate()
 
-      let date1 = year + '/' + month + '/' + date
+        let date1 = year + '/' + month + '/' + date
 
-      listaFeriados.forEach(day => {
-        year = parseISO(day).getFullYear()
-        month = parseISO(day).getMonth() + 1 //Months are zero based
-        date = parseISO(day).getDate()
+        listaFeriados.forEach(day => {
+          year = parseISO(day).getFullYear()
+          month = parseISO(day).getMonth() + 1 //Months are zero based
+          date = parseISO(day).getDate()
 
-        let date2 = year + '/' + month + '/' + date
+          let date2 = year + '/' + month + '/' + date
 
-        if (
-          fechaActual.getDay() === 0 ||
-          fechaActual.getDay() === 6 ||
-          date1 === date2
-        ) {
-          bandera = false
-        }
-      })
-      count++
-      bandera ? resultado++ : null
+          if (
+            fechaActual.getDay() === 0 ||
+            fechaActual.getDay() === 6 ||
+            date1 === date2
+          ) {
+            bandera = false
+          }
+        })
+        count++
+        bandera ? resultado++ : null
+      }
+    } else if (fechaInicio > fechaFin) {
+      while (count < totalDias) {
+        bandera = true
+        if (count > 0)
+          fechaActual = new Date(fechaActual.setDate(fechaActual.getDate() - 1))
+
+        year = fechaActual.getFullYear()
+        month = fechaActual.getMonth() + 1 //Months are zero based
+        date = fechaActual.getDate()
+
+        let date1 = year + '/' + month + '/' + date
+
+        listaFeriados.forEach(day => {
+          year = parseISO(day).getFullYear()
+          month = parseISO(day).getMonth() + 1 //Months are zero based
+          date = parseISO(day).getDate()
+
+          let date2 = year + '/' + month + '/' + date
+
+          if (
+            fechaActual.getDay() === 0 ||
+            fechaActual.getDay() === 6 ||
+            date1 === date2
+          ) {
+            bandera = false
+          }
+        })
+        count++
+        bandera ? resultado++ : null
+      }
     }
+
     setTotalDias(resultado)
   }
 
@@ -243,6 +308,9 @@ const CalcularFecha = ({ fechas }) => {
                   <button
                     onClick={() => {
                       setPlazoDias(plazoDias - 1)
+                      // plazoDias > 0
+                      //   ? setPlazoDias(plazoDias - 1)
+                      //   : setPlazoDias(0)
                     }}
                   >
                     <svg
