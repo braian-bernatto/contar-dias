@@ -3,12 +3,14 @@ import React, { useEffect, useState } from 'react'
 import { css } from '@emotion/react'
 import Toggle from './Toggle'
 import { parseISO, differenceInCalendarDays } from 'date-fns'
+import { TransitionGroup, CSSTransition } from 'react-transition-group'
 
 const CalcularFecha = ({ fechas }) => {
   const listaFeriados = fechas.data.map(fecha => fecha.attributes.fecha)
 
   const [diasHabilesToggle, setDiasHabilesToggle] = useState(false)
   const [vistaFecha, setVistaFecha] = useState(true)
+  const [vistaDias, setVistaDias] = useState(false)
   const [plazoDias, setPlazoDias] = useState(0)
   const [fechaInicio, setFechaInicio] = useState(
     new Date().toLocaleDateString('en-CA')
@@ -162,7 +164,7 @@ const CalcularFecha = ({ fechas }) => {
         id='titulo'
         className='w-full rounded-full bg-teal-600 text-white text-sm text-center font-semibold py-1'
       >
-        {diasHabilesToggle ? 'DÍAS HÁBILES' : 'DÍAS CORRIDOS'}
+        DÍAS {diasHabilesToggle ? 'HÁBILES' : 'CORRIDOS'}
       </h1>
       <Toggle setDiasHabilesToggle={setDiasHabilesToggle} />
       <div className='w-full flex justify-between place-items-center'>
@@ -186,147 +188,167 @@ const CalcularFecha = ({ fechas }) => {
           }}
         />
       </div>
-      {vistaFecha ? (
-        <>
-          <div className='w-full flex justify-between place-items-center'>
-            <label htmlFor='plazo' className='mr-2 border-b-2 border-teal-600'>
-              Días de plazo
-            </label>
-            <div className='flex items-center'>
-              <input
-                id='plazo'
-                type='number'
-                className='w-36 text-center text-4xl font-bold p-2 text-pink-800 focus:outline-none'
-                value={plazoDias}
-                onChange={e => {
-                  setPlazoDias(parseInt(e.target.value))
-                  diasHabilesToggle
-                    ? diasHabiles(fechaInicio, e.target.value, listaFeriados)
-                    : diasCorridos(fechaInicio, parseInt(e.target.value))
-                }}
-              />
+      <div className='w-full relative'>
+        <CSSTransition
+          in={vistaFecha}
+          timeout={{ exit: 800, enter: 800 }}
+          classNames='fechas'
+          unmountOnExit={true}
+          onEntering={() => setVistaDias(false)}
+          onExiting={() => setVistaDias(true)}
+        >
+          <div className='flex flex-wrap justify-center items-center gap-4'>
+            <div className='w-full flex justify-between place-items-center'>
+              <label
+                htmlFor='plazo'
+                className='mr-2 border-b-2 border-teal-600'
+              >
+                Días de plazo
+              </label>
+              <div className='flex items-center'>
+                <input
+                  id='plazo'
+                  type='number'
+                  className='w-36 text-center text-4xl font-bold p-2 text-pink-800 focus:outline-none'
+                  value={plazoDias}
+                  onChange={e => {
+                    setPlazoDias(parseInt(e.target.value))
+                    diasHabilesToggle
+                      ? diasHabiles(fechaInicio, e.target.value, listaFeriados)
+                      : diasCorridos(fechaInicio, parseInt(e.target.value))
+                  }}
+                />
 
-              <div className='flex flex-col justify-between gap-3 text-teal-700'>
-                <button
-                  onClick={() => {
-                    setPlazoDias(plazoDias + 1)
-                  }}
-                >
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    className='h-6 w-6'
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    stroke='currentColor'
+                <div className='flex flex-col justify-between gap-3 text-teal-700'>
+                  <button
+                    onClick={() => {
+                      setPlazoDias(plazoDias + 1)
+                    }}
                   >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth={5}
-                      d='M5 15l7-7 7 7'
-                    />
-                  </svg>
-                </button>
-                <button
-                  onClick={() => {
-                    setPlazoDias(plazoDias - 1)
-                  }}
-                >
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    className='h-6 w-6'
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    stroke='currentColor'
+                    <svg
+                      xmlns='http://www.w3.org/2000/svg'
+                      className='h-6 w-6'
+                      fill='none'
+                      viewBox='0 0 24 24'
+                      stroke='currentColor'
+                    >
+                      <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        strokeWidth={5}
+                        d='M5 15l7-7 7 7'
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setPlazoDias(plazoDias - 1)
+                    }}
                   >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth={5}
-                      d='M19 9l-7 7-7-7'
-                    />
-                  </svg>
-                </button>
+                    <svg
+                      xmlns='http://www.w3.org/2000/svg'
+                      className='h-6 w-6'
+                      fill='none'
+                      viewBox='0 0 24 24'
+                      stroke='currentColor'
+                    >
+                      <path
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                        strokeWidth={5}
+                        d='M19 9l-7 7-7-7'
+                      />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-          <div className='w-full flex flex-wrap justify-center shadow-xl place-items-center rounded-xl border text-white'>
-            <label
-              htmlFor='fechaTope'
-              className='z-30 rounded-t-xl w-full text-center px-1 text-lg font-bold bg-teal-600 capitalize'
+            <div className='w-full flex flex-wrap justify-center shadow-xl place-items-center rounded-xl border text-white'>
+              <label
+                htmlFor='fechaTope'
+                className='z-30 rounded-t-xl w-full text-center px-1 text-lg font-bold bg-teal-600 capitalize'
+              >
+                Fecha Tope
+              </label>
+              <input
+                css={css`
+                  ::-webkit-calendar-picker-indicator {
+                    position: absolute;
+                    top: -1000px;
+                  }
+                `}
+                id='fechaTope'
+                type='date'
+                disabled='disabled'
+                className='text-center focus:outline-none bg-transparent text-gray-500 font-bold py-4 text-4xl'
+                value={fechaTope}
+              />
+            </div>
+            <p
+              className={`w-full ${
+                restaDias < 0 ? 'text-pink-800' : 'text-teal-700'
+              } font-bold text-center`}
             >
-              Fecha Tope
-            </label>
-            <input
-              css={css`
-                ::-webkit-calendar-picker-indicator {
-                  position: absolute;
-                  top: -1000px;
-                }
-              `}
-              id='fechaTope'
-              type='date'
-              disabled='disabled'
-              className='text-center focus:outline-none bg-transparent text-gray-500 font-bold py-4 text-4xl'
-              value={fechaTope}
-            />
-          </div>
-          <p
-            className={`w-full ${
-              restaDias < 0 ? 'text-pink-800' : 'text-teal-700'
-            } font-bold text-center`}
-          >
-            {isNaN(restaDias)
-              ? null
-              : restaDias === 0
-              ? 'Hoy'
-              : restaDias > 0
-              ? 'Dentro de '
-              : 'Hace '}
-            {isNaN(restaDias)
-              ? null
-              : restaDias === 0
-              ? ''
-              : Math.abs(restaDias)}
-            {isNaN(restaDias)
-              ? null
-              : restaDias === 0
-              ? ''
-              : restaDias > 1 || restaDias < -1
-              ? ' días'
-              : ' día'}
-          </p>
-        </>
-      ) : (
-        <>
-          <div className='w-full flex justify-between'>
-            <label
-              htmlFor='fechaFin'
-              className='mr-3 border-b-2 border-teal-600'
-            >
-              Fecha Fin
-            </label>
-            <input
-              id='fechaFin'
-              type='date'
-              className='text-center focus:outline-none font-bold'
-              value={fechaFin}
-              onChange={e => {
-                setFechaFin(e.target.value)
-                calcularTotalDias(fechaInicio, e.target.value)
-              }}
-            />
-          </div>
-          <div className='w-36 flex flex-wrap justify-center place-items-center rounded-xl border shadow-xl text-white'>
-            <h1 className='z-30 rounded-t-xl w-full text-center px-1 text-lg font-bold bg-teal-600 capitalize'>
-              Total Días
-            </h1>
-            <p className='text-center text-6xl font-bold p-4 text-gray-500'>
-              {totalDias}
+              {isNaN(restaDias)
+                ? null
+                : restaDias === 0
+                ? 'Hoy'
+                : restaDias > 0
+                ? 'Dentro de '
+                : 'Hace '}
+              {isNaN(restaDias)
+                ? null
+                : restaDias === 0
+                ? ''
+                : Math.abs(restaDias)}
+              {isNaN(restaDias)
+                ? null
+                : restaDias === 0
+                ? ''
+                : restaDias > 1 || restaDias < -1
+                ? ' días'
+                : ' día'}
             </p>
           </div>
-        </>
-      )}
+        </CSSTransition>
+        <CSSTransition
+          in={vistaDias}
+          timeout={{ exit: 800, enter: 800 }}
+          classNames='dias'
+          mountOnEnter={true}
+          unmountOnExit={true}
+          onExited={() => setVistaFecha(true)}
+        >
+          <div className='flex flex-wrap justify-center items-center gap-4'>
+            <div className='w-full flex justify-between'>
+              <label
+                htmlFor='fechaFin'
+                className='mr-3 border-b-2 border-teal-600'
+              >
+                Fecha Fin
+              </label>
+              <input
+                id='fechaFin'
+                type='date'
+                className='text-center focus:outline-none font-bold'
+                value={fechaFin}
+                onChange={e => {
+                  setFechaFin(e.target.value)
+                  calcularTotalDias(fechaInicio, e.target.value)
+                }}
+              />
+            </div>
+            <div className='w-36 flex flex-wrap justify-center place-items-center rounded-xl border shadow-xl text-white'>
+              <h1 className='z-30 rounded-t-xl w-full text-center px-1 text-lg font-bold bg-teal-600 capitalize'>
+                Total Días
+              </h1>
+              <p className='text-center text-6xl font-bold p-4 text-gray-500'>
+                {totalDias}
+              </p>
+            </div>
+          </div>
+        </CSSTransition>
+      </div>
     </div>
   )
 }
