@@ -29,9 +29,9 @@ const Feriados = ({ fechas }) => {
         FERIADOS
       </h1>
 
-      <div className='flex flex-wrap gap-4 justify-evenly place-items-center'>
+      <ul className='flex flex-wrap gap-4 justify-evenly place-items-center'>
         {listadoOrdenado.map(item => (
-          <div
+          <li
             key={item.id}
             className='z-10 relative w-28 text-sm flex flex-wrap justify-center place-items-center rounded-xl border shadow-xl text-white overflow-hidden cursor-pointer'
             onClick={() => {
@@ -57,16 +57,15 @@ const Feriados = ({ fechas }) => {
               </p>
             </div>
             <p
-              id='motivo2'
               className={`w-full h-full p-2 ${
                 isVisible.indexOf(item.id) !== -1 ? '' : 'translate-y-28'
-              } bg-white opacity-80 font-bold text-center text-md text-pink-800 transition-all ease-in delay-150 z-50 transform absolute flex items-center justify-center`}
+              } bg-white opacity-80 font-bold text-center text-md text-pink-800 transition-all ease-in delay-150 z-50 transform absolute flex items-center justify-center text-shadow-xl`}
             >
               {item.attributes.titulo}
             </p>
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   )
 }
