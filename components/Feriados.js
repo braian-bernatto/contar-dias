@@ -57,9 +57,9 @@ const Feriados = ({ fechas }) => {
               </p>
             </div>
             <p
-              className={`w-full h-full p-2 ${
+              className={`w-full p-2 h-full ${
                 isVisible.indexOf(item.id) !== -1 ? '' : 'translate-y-28'
-              } bg-white opacity-80 font-bold text-center text-md text-pink-800 transition-all ease-in delay-150 z-50 transform absolute flex items-center justify-center text-shadow-xl`}
+              } bg-white opacity-80 font-bold text-center text-md text-pink-800 transform z-50 bounce absolute flex items-center justify-center text-shadow-xl`}
             >
               {item.attributes.titulo}
             </p>
