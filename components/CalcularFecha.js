@@ -393,7 +393,7 @@ const CalcularFecha = ({ fechas }) => {
                 htmlFor='fechaFin'
                 className='mr-3 border-b-2 border-teal-600'
               >
-                Fecha Fin
+                Fecha fin
               </label>
               <input
                 id='fechaFin'
