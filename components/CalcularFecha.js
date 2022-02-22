@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { css } from '@emotion/react'
 import Toggle from './Toggle'
 import { parseISO, differenceInCalendarDays } from 'date-fns'
-import { TransitionGroup, CSSTransition } from 'react-transition-group'
+import { CSSTransition } from 'react-transition-group'
 
 const CalcularFecha = ({ fechas }) => {
   const listaFeriados = fechas.data.map(fecha => fecha.attributes.fecha)
@@ -37,64 +37,66 @@ const CalcularFecha = ({ fechas }) => {
     let year = ''
     let bandera = false
 
-    if (dias > 0) {
-      // dias positivos
-      while (count < dias) {
-        bandera = true
-        fechaFinal = new Date(fechaFinal.setDate(fechaFinal.getDate() + 1))
+    // limite para calcular los feriados a 1000, pasando ese limite el navegador usa demasiada ram
+    if (dias <= 1000)
+      if (dias > 0) {
+        // dias positivos
+        while (count < dias) {
+          bandera = true
+          fechaFinal = new Date(fechaFinal.setDate(fechaFinal.getDate() + 1))
 
-        year = fechaFinal.getFullYear()
-        month = fechaFinal.getMonth() + 1 //Months are zero based
-        date = fechaFinal.getDate()
+          year = fechaFinal.getFullYear()
+          month = fechaFinal.getMonth() + 1 //Months are zero based
+          date = fechaFinal.getDate()
 
-        let date1 = year + '/' + month + '/' + date
+          let date1 = year + '/' + month + '/' + date
 
-        feriados.forEach(day => {
-          year = parseISO(day).getFullYear()
-          month = parseISO(day).getMonth() + 1 //Months are zero based
-          date = parseISO(day).getDate()
+          feriados.forEach(day => {
+            year = parseISO(day).getFullYear()
+            month = parseISO(day).getMonth() + 1 //Months are zero based
+            date = parseISO(day).getDate()
 
-          let date2 = year + '/' + month + '/' + date
+            let date2 = year + '/' + month + '/' + date
 
-          if (
-            fechaFinal.getDay() === 0 ||
-            fechaFinal.getDay() === 6 ||
-            date1 === date2
-          ) {
-            bandera = false
-          }
-        })
-        bandera ? count++ : null
-      }
-    } else if (dias < 0)
-      // dias negativos
-      while (count < Math.abs(dias)) {
-        bandera = true
-        fechaFinal = new Date(fechaFinal.setDate(fechaFinal.getDate() - 1))
+            if (
+              fechaFinal.getDay() === 0 ||
+              fechaFinal.getDay() === 6 ||
+              date1 === date2
+            ) {
+              bandera = false
+            }
+          })
+          bandera ? count++ : null
+        }
+      } else if (dias < 0)
+        // dias negativos
+        while (count < Math.abs(dias)) {
+          bandera = true
+          fechaFinal = new Date(fechaFinal.setDate(fechaFinal.getDate() - 1))
 
-        year = fechaFinal.getFullYear()
-        month = fechaFinal.getMonth() + 1 //Months are zero based
-        date = fechaFinal.getDate()
+          year = fechaFinal.getFullYear()
+          month = fechaFinal.getMonth() + 1 //Months are zero based
+          date = fechaFinal.getDate()
 
-        let date1 = year + '/' + month + '/' + date
+          let date1 = year + '/' + month + '/' + date
 
-        feriados.forEach(day => {
-          year = parseISO(day).getFullYear()
-          month = parseISO(day).getMonth() + 1 //Months are zero based
-          date = parseISO(day).getDate()
+          feriados.forEach(day => {
+            year = parseISO(day).getFullYear()
+            month = parseISO(day).getMonth() + 1 //Months are zero based
+            date = parseISO(day).getDate()
 
-          let date2 = year + '/' + month + '/' + date
+            let date2 = year + '/' + month + '/' + date
 
-          if (
-            fechaFinal.getDay() === 0 ||
-            fechaFinal.getDay() === 6 ||
-            date1 === date2
-          ) {
-            bandera = false
-          }
-        })
-        bandera ? count++ : null
-      }
+            if (
+              fechaFinal.getDay() === 0 ||
+              fechaFinal.getDay() === 6 ||
+              date1 === date2
+            ) {
+              bandera = false
+            }
+          })
+          bandera ? count++ : null
+        }
 
     setFechaTope(fechaFinal.toLocaleDateString('en-CA'))
     setRestaDias(differenceInCalendarDays(fechaFinal, new Date()))
@@ -129,67 +131,73 @@ const CalcularFecha = ({ fechas }) => {
     let year = ''
     let bandera = true
 
-    if (fechaInicio < fechaFin) {
-      while (count < totalDias) {
-        bandera = true
-        if (count > 0)
-          fechaActual = new Date(fechaActual.setDate(fechaActual.getDate() + 1))
+    // limite de 1000 dias, pasando el limite el navegador corre riesgo de congelarse
+    if (totalDias <= 1000)
+      if (fechaInicio < fechaFin) {
+        while (count < totalDias) {
+          bandera = true
+          if (count > 0)
+            fechaActual = new Date(
+              fechaActual.setDate(fechaActual.getDate() + 1)
+            )
 
-        year = fechaActual.getFullYear()
-        month = fechaActual.getMonth() + 1 //Months are zero based
-        date = fechaActual.getDate()
+          year = fechaActual.getFullYear()
+          month = fechaActual.getMonth() + 1 //Months are zero based
+          date = fechaActual.getDate()
 
-        let date1 = year + '/' + month + '/' + date
+          let date1 = year + '/' + month + '/' + date
 
-        listaFeriados.forEach(day => {
-          year = parseISO(day).getFullYear()
-          month = parseISO(day).getMonth() + 1 //Months are zero based
-          date = parseISO(day).getDate()
+          listaFeriados.forEach(day => {
+            year = parseISO(day).getFullYear()
+            month = parseISO(day).getMonth() + 1 //Months are zero based
+            date = parseISO(day).getDate()
 
-          let date2 = year + '/' + month + '/' + date
+            let date2 = year + '/' + month + '/' + date
 
-          if (
-            fechaActual.getDay() === 0 ||
-            fechaActual.getDay() === 6 ||
-            date1 === date2
-          ) {
-            bandera = false
-          }
-        })
-        count++
-        bandera ? resultado++ : null
+            if (
+              fechaActual.getDay() === 0 ||
+              fechaActual.getDay() === 6 ||
+              date1 === date2
+            ) {
+              bandera = false
+            }
+          })
+          count++
+          bandera ? resultado++ : null
+        }
+      } else if (fechaInicio > fechaFin) {
+        while (count < totalDias) {
+          bandera = true
+          if (count > 0)
+            fechaActual = new Date(
+              fechaActual.setDate(fechaActual.getDate() - 1)
+            )
+
+          year = fechaActual.getFullYear()
+          month = fechaActual.getMonth() + 1 //Months are zero based
+          date = fechaActual.getDate()
+
+          let date1 = year + '/' + month + '/' + date
+
+          listaFeriados.forEach(day => {
+            year = parseISO(day).getFullYear()
+            month = parseISO(day).getMonth() + 1 //Months are zero based
+            date = parseISO(day).getDate()
+
+            let date2 = year + '/' + month + '/' + date
+
+            if (
+              fechaActual.getDay() === 0 ||
+              fechaActual.getDay() === 6 ||
+              date1 === date2
+            ) {
+              bandera = false
+            }
+          })
+          count++
+          bandera ? resultado++ : null
+        }
       }
-    } else if (fechaInicio > fechaFin) {
-      while (count < totalDias) {
-        bandera = true
-        if (count > 0)
-          fechaActual = new Date(fechaActual.setDate(fechaActual.getDate() - 1))
-
-        year = fechaActual.getFullYear()
-        month = fechaActual.getMonth() + 1 //Months are zero based
-        date = fechaActual.getDate()
-
-        let date1 = year + '/' + month + '/' + date
-
-        listaFeriados.forEach(day => {
-          year = parseISO(day).getFullYear()
-          month = parseISO(day).getMonth() + 1 //Months are zero based
-          date = parseISO(day).getDate()
-
-          let date2 = year + '/' + month + '/' + date
-
-          if (
-            fechaActual.getDay() === 0 ||
-            fechaActual.getDay() === 6 ||
-            date1 === date2
-          ) {
-            bandera = false
-          }
-        })
-        count++
-        bandera ? resultado++ : null
-      }
-    }
 
     setTotalDias(resultado)
   }
@@ -277,17 +285,23 @@ const CalcularFecha = ({ fechas }) => {
                   className='w-36 text-center text-4xl font-bold p-2 text-pink-800 focus:outline-none'
                   value={plazoDias}
                   onChange={e => {
-                    setPlazoDias(parseInt(e.target.value))
+                    parseInt(e.target.value) <= 1000 &&
+                    parseInt(e.target.value) >= -1000
+                      ? setPlazoDias(parseInt(e.target.value))
+                      : setPlazoDias(0)
                     diasHabilesToggle
                       ? diasHabiles(fechaInicio, e.target.value, listaFeriados)
                       : diasCorridos(fechaInicio, parseInt(e.target.value))
+                    console.log(parseInt(e.target.value))
                   }}
                 />
 
                 <div className='flex flex-col justify-between gap-3 text-teal-700'>
                   <button
                     onClick={() => {
-                      setPlazoDias(plazoDias + 1)
+                      plazoDias < 1000 && plazoDias > -1000
+                        ? setPlazoDias(plazoDias + 1)
+                        : setPlazoDias(0)
                     }}
                   >
                     <svg
@@ -307,10 +321,9 @@ const CalcularFecha = ({ fechas }) => {
                   </button>
                   <button
                     onClick={() => {
-                      setPlazoDias(plazoDias - 1)
-                      // plazoDias > 0
-                      //   ? setPlazoDias(plazoDias - 1)
-                      //   : setPlazoDias(0)
+                      plazoDias < 1000 && plazoDias > -1000
+                        ? setPlazoDias(plazoDias - 1)
+                        : setPlazoDias(0)
                     }}
                   >
                     <svg
