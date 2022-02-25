@@ -128,21 +128,23 @@ const CalcularFecha = ({ fechas }) => {
 
   const diasHabilesV2 = (fechaInicio, fechaFin) => {
     let totalDias = 0
-    let date = ''
+    let date = parseISO(fechaInicio).getDay()
 
     totalDias = Math.abs(
       differenceInBusinessDays(parseISO(fechaFin), parseISO(fechaInicio))
     )
-    console.log(totalDias)
+
+    if (date !== 0 && date !== 6) {
+      totalDias = totalDias + 1
+    }
+
     listaFeriados.forEach(day => {
       let esAntes = isBefore(parseISO(day), addDays(parseISO(fechaFin), 1))
       let esDespues = isAfter(parseISO(day), subDays(parseISO(fechaInicio), 1))
       date = parseISO(day).getDay()
       if (esAntes && esDespues)
         if (date !== 0 && date !== 6) {
-          console.log({ date })
           totalDias = totalDias - 1
-          console.log({ day }, { esAntes }, { esDespues })
         }
     })
 
