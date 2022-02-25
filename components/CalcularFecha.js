@@ -21,6 +21,7 @@ const CalcularFecha = ({ fechas }) => {
   const [totalDias, setTotalDias] = useState(0)
 
   const diasCorridos = (fecha, dias) => {
+    dias = dias > 0 ? dias - 1 : dias + 1
     let fechaFinal = new Date(fecha.replaceAll('-', '/'))
     fechaFinal = new Date(
       fechaFinal.setDate(fechaFinal.getDate() + parseInt(dias))
@@ -36,6 +37,7 @@ const CalcularFecha = ({ fechas }) => {
     let month = ''
     let year = ''
     let bandera = false
+    dias = dias > 0 ? dias - 1 : dias + 1
 
     // limite para calcular los feriados a 1000, pasando ese limite el navegador usa demasiada ram
     if (dias <= 1000)
