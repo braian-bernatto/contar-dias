@@ -2,7 +2,15 @@ import React, { useEffect, useState } from 'react'
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import Toggle from './Toggle'
-import { parseISO, differenceInCalendarDays } from 'date-fns'
+import {
+  parseISO,
+  differenceInCalendarDays,
+  differenceInBusinessDays,
+  isBefore,
+  isAfter,
+  addDays,
+  subDays
+} from 'date-fns'
 import { CSSTransition } from 'react-transition-group'
 
 const CalcularFecha = ({ fechas }) => {
@@ -119,87 +127,26 @@ const CalcularFecha = ({ fechas }) => {
   }
 
   const diasHabilesV2 = (fechaInicio, fechaFin) => {
-    let resultado = 0
-    let fechaActual = new Date(fechaInicio.replaceAll('-', '/'))
-    let totalDias =
-      Math.abs(
-        differenceInCalendarDays(parseISO(fechaFin), parseISO(fechaInicio))
-      ) + 1
-    let count = 0
+    let totalDias = 0
     let date = ''
-    let month = ''
-    let year = ''
-    let bandera = true
 
-    // limite de 1000 dias, pasando el limite el navegador corre riesgo de congelarse
-    if (totalDias <= 1000)
-      if (fechaInicio < fechaFin) {
-        while (count < totalDias) {
-          bandera = true
-          if (count > 0)
-            fechaActual = new Date(
-              fechaActual.setDate(fechaActual.getDate() + 1)
-            )
-
-          year = fechaActual.getFullYear()
-          month = fechaActual.getMonth() + 1 //Months are zero based
-          date = fechaActual.getDate()
-
-          let date1 = year + '/' + month + '/' + date
-
-          listaFeriados.forEach(day => {
-            year = parseISO(day).getFullYear()
-            month = parseISO(day).getMonth() + 1 //Months are zero based
-            date = parseISO(day).getDate()
-
-            let date2 = year + '/' + month + '/' + date
-
-            if (
-              fechaActual.getDay() === 0 ||
-              fechaActual.getDay() === 6 ||
-              date1 === date2
-            ) {
-              bandera = false
-            }
-          })
-          count++
-          bandera ? resultado++ : null
+    totalDias = Math.abs(
+      differenceInBusinessDays(parseISO(fechaFin), parseISO(fechaInicio))
+    )
+    console.log(totalDias)
+    listaFeriados.forEach(day => {
+      let esAntes = isBefore(parseISO(day), addDays(parseISO(fechaFin), 1))
+      let esDespues = isAfter(parseISO(day), subDays(parseISO(fechaInicio), 1))
+      date = parseISO(day).getDay()
+      if (esAntes && esDespues)
+        if (date !== 0 && date !== 6) {
+          console.log({ date })
+          totalDias = totalDias - 1
+          console.log({ day }, { esAntes }, { esDespues })
         }
-      } else if (fechaInicio > fechaFin) {
-        while (count < totalDias) {
-          bandera = true
-          if (count > 0)
-            fechaActual = new Date(
-              fechaActual.setDate(fechaActual.getDate() - 1)
-            )
+    })
 
-          year = fechaActual.getFullYear()
-          month = fechaActual.getMonth() + 1 //Months are zero based
-          date = fechaActual.getDate()
-
-          let date1 = year + '/' + month + '/' + date
-
-          listaFeriados.forEach(day => {
-            year = parseISO(day).getFullYear()
-            month = parseISO(day).getMonth() + 1 //Months are zero based
-            date = parseISO(day).getDate()
-
-            let date2 = year + '/' + month + '/' + date
-
-            if (
-              fechaActual.getDay() === 0 ||
-              fechaActual.getDay() === 6 ||
-              date1 === date2
-            ) {
-              bandera = false
-            }
-          })
-          count++
-          bandera ? resultado++ : null
-        }
-      }
-
-    setTotalDias(resultado)
+    setTotalDias(totalDias)
   }
 
   useEffect(() => {
@@ -292,7 +239,6 @@ const CalcularFecha = ({ fechas }) => {
                     diasHabilesToggle
                       ? diasHabiles(fechaInicio, e.target.value, listaFeriados)
                       : diasCorridos(fechaInicio, parseInt(e.target.value))
-                    console.log(parseInt(e.target.value))
                   }}
                 />
 
