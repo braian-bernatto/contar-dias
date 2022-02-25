@@ -10,7 +10,7 @@ Podes hacer lo siguiente:
 
 ## Link
 
-[https://bernatto-contar-dias.netlify.app/](https://bernatto-contar-dias.netlify.app/)
+[https://bernatto-calcular-dias-rrhh.netlify.app](https://bernatto-calcular-dias-rrhh.netlify.app)
 
 ## Herramientas
 
