@@ -5,9 +5,7 @@ const Feriados = ({ fechas }) => {
   const listado = fechas.data
 
   const listadoOrdenado = listado.sort(
-    (a, b) =>
-      parseISO(a.attributes.fecha).getMonth() -
-      parseISO(b.attributes.fecha).getMonth()
+    (a, b) => parseISO(a.attributes.fecha) - parseISO(b.attributes.fecha)
   )
 
   const [isVisible, setIsVisible] = useState([])
