@@ -42,7 +42,7 @@ export default function Home() {
       <div className='container mx-auto'>
         <header className='flex justify-center items-center mb-7'>
           <h1 className='text-teal-600 text-md font-bold mt-5 bg-white text-center px-4 rounded-xl shadow-lg border-r-4 border-l-4 border-teal-600 border-t border-b'>
-            Calcular Días
+            Calcular Días RRHH
           </h1>
         </header>
 
