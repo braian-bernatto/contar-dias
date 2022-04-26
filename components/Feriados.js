@@ -19,7 +19,10 @@ const Feriados = ({ fechas }) => {
   }
 
   return (
-    <div className='w-80 sm:w-4/5 lg:w-3/5 bg-white rounded-xl p-5 flex flex-wrap justify-center items-center gap-4 shadow-xl select-none'>
+    <div className='w-80 sm:w-4/5 lg:w-3/5 bg-white rounded-xl p-5 flex flex-wrap justify-center items-center gap-4 shadow-xl select-none relative'>
+      <div className='ribbon-wrapper-8 text-white text-xl'>
+        <div className='ribbon-8'>2022</div>
+      </div>
       <h1
         id='titulo'
         className='w-full rounded-full bg-pink-700 text-white text-sm text-center font-semibold py-1'
