@@ -8,7 +8,7 @@
 module.exports = {
   reactStrictMode: true,
   env: {
-    backendURL: 'https://contar-dias-strapi.herokuapp.com',
+    backendURL: 'http://strapi-dias.bernatto.xyz',
     frontendURL: 'http://localhost:3000'
   }
 }
