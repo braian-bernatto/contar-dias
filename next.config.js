@@ -8,7 +8,7 @@
 module.exports = {
   reactStrictMode: true,
   env: {
-    backendURL: 'http://strapi-dias.bernatto.xyz',
+    backendURL: 'https://strapi-dias.bernatto.xyz',
     frontendURL: 'http://localhost:3000'
   }
 }
