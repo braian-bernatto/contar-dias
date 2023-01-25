@@ -2,8 +2,7 @@ import { parseISO } from 'date-fns'
 import React, { useState } from 'react'
 
 const Feriados = ({ fechas }) => {
-  const listado = fechas.data
-
+  const listado = fechas
   const listadoOrdenado = listado.sort(
     (a, b) => parseISO(a.attributes.fecha) - parseISO(b.attributes.fecha)
   )
@@ -21,7 +20,12 @@ const Feriados = ({ fechas }) => {
   return (
     <div className='w-80 sm:w-4/5 lg:w-3/5 bg-white rounded-xl p-5 flex flex-wrap justify-center items-center gap-4 shadow-xl select-none relative'>
       <div className='ribbon-wrapper-8 text-white text-xl'>
-        <div className='ribbon-8'>2022</div>
+        <div className='ribbon-8'>
+          {fechas.length &&
+            parseISO(fechas[0].attributes.fecha).toLocaleString('es-Es', {
+              year: 'numeric'
+            })}
+        </div>
       </div>
       <h1
         id='titulo'

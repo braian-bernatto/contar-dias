@@ -14,7 +14,7 @@ import {
 import { CSSTransition } from 'react-transition-group'
 
 const CalcularFecha = ({ fechas }) => {
-  const listaFeriados = fechas.data.map(fecha => fecha.attributes.fecha)
+  const listaFeriados = fechas.map(fecha => fecha.attributes.fecha)
 
   const [diasHabilesToggle, setDiasHabilesToggle] = useState(false)
   const [vistaFecha, setVistaFecha] = useState(true)

@@ -19,7 +19,9 @@ export default function Home() {
   useEffect(async () => {
     try {
       const res = await clienteAxios.get(`/api/feriados`)
-      setFechas(res.data)
+      setFechas(
+        res.data.data.filter(year => year.attributes.fecha.includes('2023'))
+      )
     } catch (error) {
       console.log(error)
     }
@@ -47,14 +49,14 @@ export default function Home() {
         </header>
 
         <main className='flex flex-col items-center mt-2 gap-4'>
-          {fechas.data ? (
+          {fechas ? (
             <CalcularFecha fechas={fechas} />
           ) : (
             <div className='relative w-8 h-8 bg-pink-700 absolute rounded-full flex justify-center items-center opacity-70 my-5'>
               <span className='animate-ping w-8 h-8 bg-pink-700 rounded-full'></span>
             </div>
           )}
-          {fechas.data ? <Feriados fechas={fechas} /> : null}
+          {fechas ? <Feriados fechas={fechas} /> : null}
         </main>
       </div>
 
