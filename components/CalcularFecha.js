@@ -9,7 +9,8 @@ import {
   isBefore,
   isAfter,
   addDays,
-  subDays
+  subDays,
+  format
 } from 'date-fns'
 import { CSSTransition } from 'react-transition-group'
 
@@ -21,7 +22,7 @@ const CalcularFecha = ({ fechas }) => {
   const [vistaDias, setVistaDias] = useState(false)
   const [plazoDias, setPlazoDias] = useState(0)
   const [fechaInicio, setFechaInicio] = useState(
-    new Date().toLocaleDateString('en-CA')
+    format(new Date(), 'yyyy-MM-dd')
   )
   const [fechaFin, setFechaFin] = useState('')
   const [fechaTope, setFechaTope] = useState('')
@@ -33,7 +34,7 @@ const CalcularFecha = ({ fechas }) => {
     fechaFinal = new Date(
       fechaFinal.setDate(fechaFinal.getDate() + parseInt(dias))
     )
-    setFechaTope(fechaFinal.toLocaleDateString('en-CA'))
+    setFechaTope(format(fechaFinal, 'yyyy-MM-dd'))
     setRestaDias(differenceInCalendarDays(fechaFinal, new Date()))
   }
 
@@ -106,7 +107,7 @@ const CalcularFecha = ({ fechas }) => {
           bandera ? count++ : null
         }
 
-    setFechaTope(fechaFinal.toLocaleDateString('en-CA'))
+    setFechaTope(format(fechaFinal, 'yyyy-MM-dd'))
     setRestaDias(differenceInCalendarDays(fechaFinal, new Date()))
   }
 
