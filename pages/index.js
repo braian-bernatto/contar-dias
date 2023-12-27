@@ -1,45 +1,39 @@
 import Head from 'next/head'
-import { useEffect, useState } from 'react'
 import CalcularFecha from '../components/CalcularFecha'
 import Feriados from '../components/Feriados'
 import clienteAxios from '../config/axios'
 
-// can't use this option because strapi takes more than 10 seconds to start on heroku which causes an error message on the app
-// export const getServerSideProps = async () => {
-//   const res = await clienteAxios.get(`/api/feriados`)
-//   return {
-//     props: {
-//       fechas: res.data
-//     }
-//   }
-// }
-
-export default function Home() {
-  const [fechas, setFechas] = useState([])
-  useEffect(async () => {
-    try {
-      const res = await clienteAxios.get(`/api/feriados`)
-      setFechas(
-        res.data.data.filter(year => year.attributes.fecha.includes('2023'))
-      )
-    } catch (error) {
-      console.log(error)
+export const getServerSideProps = async () => {
+  const res = await clienteAxios.get(`/api/feriados`)
+  const filteredFeriados = res.data.data.filter(year => year.attributes.fecha.includes(new Date().getFullYear().toString()))
+  return {
+    props: {
+      fechas: filteredFeriados
     }
-  }, [])
+  }
+}
+
+export default function Home({fechas}) {
+
+  // useEffect(() => {
+  //   const getFechas = async () => {
+  //     try {
+  //       const res = await clienteAxios.get(`/api/feriados`)
+  //       setFechas(
+  //         res.data.data.filter(year => year.attributes.fecha.includes('2023'))
+  //       )
+  //     } catch (error) {
+  //       console.log(error)
+  //     }
+  //   }
+
+  //   getFechas()
+  // }, [])
 
   return (
     <div className='min-h-screen bg-gray-200'>
       <Head>
-        <title>Calcular Días</title>
-        <meta
-          name='description'
-          content='App para calcular días y plazos entre dos fechas'
-        />
-        <link rel='icon' href='/favicon.ico' />
-        <link
-          href='https://fonts.googleapis.com/css2?family=Raleway:wght@300;500;700&display=swap'
-          rel='stylesheet'
-        />
+        <title>Calcular Días</title>      
       </Head>
       <div className='container mx-auto'>
         <header className='flex justify-center items-center mb-7'>

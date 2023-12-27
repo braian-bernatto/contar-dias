@@ -15,6 +15,7 @@ import {
 import { CSSTransition } from 'react-transition-group'
 
 const CalcularFecha = ({ fechas }) => {
+
   const listaFeriados = fechas.map(fecha => fecha.attributes.fecha)
 
   const [diasHabilesToggle, setDiasHabilesToggle] = useState(false)
@@ -29,10 +30,10 @@ const CalcularFecha = ({ fechas }) => {
   const [restaDias, setRestaDias] = useState(0)
   const [totalDias, setTotalDias] = useState(0)
 
-  const diasCorridos = (fecha, dias) => {
+  const diasCorridos = (fecha, dias) => {    
     let fechaFinal = new Date(fecha.replaceAll('-', '/'))
     fechaFinal = new Date(
-      fechaFinal.setDate(fechaFinal.getDate() + parseInt(dias))
+      fechaFinal.setDate(fechaFinal.getDate() + parseInt(dias || 0))
     )
     setFechaTope(format(fechaFinal, 'yyyy-MM-dd'))
     setRestaDias(differenceInCalendarDays(fechaFinal, new Date()))
@@ -242,11 +243,12 @@ const CalcularFecha = ({ fechas }) => {
                   type='number'
                   className='w-36 text-center text-4xl font-bold p-2 text-pink-800 focus:outline-none'
                   value={plazoDias}
+                  onClick={ e=> e.target.select()}
                   onChange={e => {
                     parseInt(e.target.value) <= 1000 &&
                     parseInt(e.target.value) >= -1000
                       ? setPlazoDias(parseInt(e.target.value))
-                      : setPlazoDias(0)
+                      : setPlazoDias('')
                     diasHabilesToggle
                       ? diasHabiles(fechaInicio, e.target.value, listaFeriados)
                       : diasCorridos(fechaInicio, parseInt(e.target.value))
