@@ -5,7 +5,9 @@ import clienteAxios from '../config/axios'
 
 export const getServerSideProps = async () => {
   const res = await clienteAxios.get(`/api/feriados`)
-  const filteredFeriados = res.data.data.filter(year => year.attributes.fecha.includes(new Date().getFullYear().toString()))
+  const filteredFeriados = res.data.data.filter(year =>
+    year.attributes.fecha.includes(new Date().getFullYear().toString())
+  )
   return {
     props: {
       fechas: filteredFeriados
@@ -13,8 +15,7 @@ export const getServerSideProps = async () => {
   }
 }
 
-export default function Home({fechas}) {
-
+export default function Home({ fechas }) {
   // useEffect(() => {
   //   const getFechas = async () => {
   //     try {
@@ -33,7 +34,11 @@ export default function Home({fechas}) {
   return (
     <div className='min-h-screen bg-gray-200'>
       <Head>
-        <title>Calcular Días</title>      
+        <title>Calcular Días</title>
+        <link
+          href='https://fonts.googleapis.com/css2?family=Raleway:wght@300;500;700&display=swap'
+          rel='stylesheet'
+        />
       </Head>
       <div className='container mx-auto'>
         <header className='flex justify-center items-center mb-7'>
