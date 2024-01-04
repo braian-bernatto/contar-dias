@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { uniqueFilter } from '../utils/uniqueFilter'
 
 const Feriados = ({ fechas }) => {
-  const actualYear = new Date().getFullYear()
+  const actualYear = new Date().getFullYear().toString()
 
   const [isVisible, setIsVisible] = useState([])
 
