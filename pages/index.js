@@ -4,7 +4,7 @@ import Feriados from '../components/Feriados'
 import clienteAxios from '../config/axios'
 
 export const getServerSideProps = async () => {
-  const res = await clienteAxios.get(`/api/feriados`)
+  const res = await clienteAxios.get(`/api/feriados?pagination[pageSize]=9999`)
   // const filteredFeriados = res.data.data.filter(year =>
   //   year.attributes.fecha.includes(new Date().getFullYear().toString())
   // )
