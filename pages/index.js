@@ -5,9 +5,12 @@ import clienteAxios from '../config/axios'
 
 export const getServerSideProps = async () => {
   const res = await clienteAxios.get(`/api/feriados`)
-  const filteredFeriados = res.data.data.filter(year =>
-    year.attributes.fecha.includes(new Date().getFullYear().toString())
-  )
+  // const filteredFeriados = res.data.data.filter(year =>
+  //   year.attributes.fecha.includes(new Date().getFullYear().toString())
+  // )
+
+  const filteredFeriados = res.data.data
+
   return {
     props: {
       fechas: filteredFeriados

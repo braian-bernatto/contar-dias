@@ -1,14 +1,32 @@
 import { parseISO } from 'date-fns'
 import React, { useState } from 'react'
+import { uniqueFilter } from '../utils/uniqueFilter'
 
 const Feriados = ({ fechas }) => {
-  const listado = fechas
-  const listadoOrdenado = listado.sort(
+  const actualYear = new Date().getFullYear()
+
+  const [isVisible, setIsVisible] = useState([])
+
+  const listadoOrdenado = fechas.sort(
     (a, b) => parseISO(a.attributes.fecha) - parseISO(b.attributes.fecha)
   )
 
-  const [isVisible, setIsVisible] = useState([])
-  const toggle = i => {
+  const listadoInicial = listadoOrdenado.filter(feriado =>
+    feriado.attributes.fecha.includes(actualYear)
+  )
+
+  const [listadoFiltrado, setListadoFiltrado] = useState(listadoInicial)
+
+  const [yearSelected, setYearSelected] = useState(actualYear)
+
+  const years =
+    listadoOrdenado.length > 0
+      ? listadoOrdenado
+          .map(year => year.attributes.fecha.split('-')[0])
+          .filter(uniqueFilter)
+      : []
+
+  const toggleInfoFeriado = i => {
     if (isVisible.indexOf(i) === -1) {
       setIsVisible([...isVisible, i])
     } else {
@@ -17,59 +35,84 @@ const Feriados = ({ fechas }) => {
     }
   }
 
-  return (
-    <div className='w-80 sm:w-4/5 lg:w-3/5 bg-white rounded-xl p-5 flex flex-wrap justify-center items-center gap-4 shadow-xl select-none relative'>
-      <div className='ribbon-wrapper-8 text-white text-xl'>
-        <div className='ribbon-8'>
-          {fechas.length > 0 &&
-            parseISO(fechas[0].attributes.fecha).toLocaleString('es-Es', {
-              year: 'numeric'
-            })}
-        </div>
-      </div>
-      <h1
-        id='titulo'
-        className='w-full rounded-full bg-pink-700 text-white text-sm text-center font-semibold py-1'>
-        FERIADOS
-      </h1>
+  const filterFeriadosByYear = year => {
+    const filtered = listadoOrdenado.filter(feriado =>
+      feriado.attributes.fecha.includes(year)
+    )
+    setListadoFiltrado(filtered)
+  }
 
-      <ul className='flex flex-wrap gap-4 justify-evenly place-items-center'>
-        {listadoOrdenado.length > 0
-          ? listadoOrdenado.map(item => (
-              <li
-                key={item.id}
-                className='z-10 relative w-28 text-sm flex flex-wrap justify-center place-items-center rounded-xl border shadow-xl text-white overflow-hidden cursor-pointer'
-                onClick={() => {
-                  toggle(item.id)
-                }}>
-                <h1 className='z-20 w-full text-center px-1 text-lg font-bold bg-teal-600 capitalize'>
-                  {parseISO(item.attributes.fecha).toLocaleString('es-Es', {
-                    month: 'long'
-                  })}
-                </h1>
-                <div className='bg-white w-full z-10'>
-                  <p
-                    id='fechaTope'
-                    className='text-center focus:outline-none w-full text-5xl font-bold text-gray-500'>
-                    {parseISO(item.attributes.fecha).getDate()}
-                  </p>
-                  <p className='w-full text-center pb-1 text-sm text-teal-600 font-bold capitalize'>
+  return (
+    <>
+      {/* filtro */}
+      <div className='w-80 sm:w-4/5 lg:w-3/5'>
+        <ol className='w-full bg-white rounded-xl p-3 flex flex-wrap justify-center items-center gap-4 shadow-xl relative'>
+          {years.map(year => (
+            <li
+              key={year}
+              className={`rounded-full text-md font-semibold text-white ${
+                yearSelected === year ? 'bg-teal-600' : 'bg-gray-400'
+              } px-2 shadow-md transform hover:scale-125 transition cursor-pointer`}
+              onClick={() => {
+                setYearSelected(year)
+                filterFeriadosByYear(year)
+                setIsVisible([])
+              }}>
+              {year}
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      {/* listado de feriados */}
+      <div className='w-80 sm:w-4/5 lg:w-3/5 bg-white rounded-xl p-5 flex flex-wrap justify-center items-center gap-4 shadow-xl select-none relative'>
+        <div className='ribbon-wrapper-8 text-white text-xl'>
+          <div className='ribbon-8'>{yearSelected ? yearSelected : ''}</div>
+        </div>
+        <h1
+          id='titulo'
+          className='w-full rounded-full bg-pink-700 text-white text-sm text-center font-semibold py-1'>
+          FERIADOS
+        </h1>
+
+        <ul className='flex flex-wrap gap-4 justify-evenly place-items-center'>
+          {listadoFiltrado.length > 0
+            ? listadoFiltrado.map(item => (
+                <li
+                  key={item.id}
+                  className='z-10 relative w-28 text-sm flex flex-wrap justify-center place-items-center rounded-xl border shadow-xl text-white overflow-hidden cursor-pointer'
+                  onClick={() => {
+                    toggleInfoFeriado(item.id)
+                  }}>
+                  <h1 className='z-20 w-full text-center px-1 text-lg font-bold bg-teal-600 capitalize'>
                     {parseISO(item.attributes.fecha).toLocaleString('es-Es', {
-                      weekday: 'long'
+                      month: 'long'
                     })}
+                  </h1>
+                  <div className='bg-white w-full z-10'>
+                    <p
+                      id='fechaTope'
+                      className='text-center focus:outline-none w-full text-5xl font-bold text-gray-500'>
+                      {parseISO(item.attributes.fecha).getDate()}
+                    </p>
+                    <p className='w-full text-center pb-1 text-sm text-teal-600 font-bold capitalize'>
+                      {parseISO(item.attributes.fecha).toLocaleString('es-Es', {
+                        weekday: 'long'
+                      })}
+                    </p>
+                  </div>
+                  <p
+                    className={`w-full p-2 h-full ${
+                      isVisible.indexOf(item.id) !== -1 ? '' : 'translate-y-28'
+                    } bg-white opacity-80 font-bold text-center text-md text-pink-800 transform z-50 bounce absolute flex items-center justify-center text-shadow-xl`}>
+                    {item.attributes.titulo}
                   </p>
-                </div>
-                <p
-                  className={`w-full p-2 h-full ${
-                    isVisible.indexOf(item.id) !== -1 ? '' : 'translate-y-28'
-                  } bg-white opacity-80 font-bold text-center text-md text-pink-800 transform z-50 bounce absolute flex items-center justify-center text-shadow-xl`}>
-                  {item.attributes.titulo}
-                </p>
-              </li>
-            ))
-          : 'No se encontraron datos'}
-      </ul>
-    </div>
+                </li>
+              ))
+            : 'No se encontraron datos'}
+        </ul>
+      </div>
+    </>
   )
 }
 

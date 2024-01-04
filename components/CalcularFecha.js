@@ -15,7 +15,6 @@ import {
 import { CSSTransition } from 'react-transition-group'
 
 const CalcularFecha = ({ fechas }) => {
-
   const listaFeriados = fechas.map(fecha => fecha.attributes.fecha)
 
   const [diasHabilesToggle, setDiasHabilesToggle] = useState(false)
@@ -30,7 +29,7 @@ const CalcularFecha = ({ fechas }) => {
   const [restaDias, setRestaDias] = useState(0)
   const [totalDias, setTotalDias] = useState(0)
 
-  const diasCorridos = (fecha, dias) => {    
+  const diasCorridos = (fecha, dias) => {
     let fechaFinal = new Date(fecha.replaceAll('-', '/'))
     fechaFinal = new Date(
       fechaFinal.setDate(fechaFinal.getDate() + parseInt(dias || 0))
@@ -174,16 +173,14 @@ const CalcularFecha = ({ fechas }) => {
         onClick={() => {
           setVistaFecha(!vistaFecha)
         }}
-        className='w-6 h-6 bg-pink-700 absolute rounded-full -top-3 -right-2 flex justify-center items-center text-white cursor-pointer opacity-70'
-      >
+        className='w-6 h-6 bg-pink-700 absolute rounded-full -top-3 -right-2 flex justify-center items-center text-white cursor-pointer opacity-70'>
         <span className='animate-ping w-6 h-6 bg-pink-700 rounded-full absolute'></span>
         <svg
           xmlns='http://www.w3.org/2000/svg'
           className='h-4 w-4'
           fill='none'
           viewBox='0 0 24 24'
-          stroke='currentColor'
-        >
+          stroke='currentColor'>
           <path
             strokeLinecap='round'
             strokeLinejoin='round'
@@ -194,16 +191,14 @@ const CalcularFecha = ({ fechas }) => {
       </button>
       <h1
         id='titulo'
-        className='w-full rounded-full bg-teal-600 text-white text-sm text-center font-semibold py-1'
-      >
+        className='w-full rounded-full bg-teal-600 text-white text-sm text-center font-semibold py-1'>
         DÍAS {diasHabilesToggle ? 'HÁBILES' : 'CORRIDOS'}
       </h1>
       <Toggle setDiasHabilesToggle={setDiasHabilesToggle} />
       <div className='w-full flex justify-between place-items-center'>
         <label
           htmlFor='fechaInicio'
-          className='mr-2 border-b-2 border-teal-600'
-        >
+          className='mr-2 border-b-2 border-teal-600'>
           Fecha inicio
         </label>
         <input
@@ -227,14 +222,12 @@ const CalcularFecha = ({ fechas }) => {
           classNames='fechas'
           unmountOnExit={true}
           onEntering={() => setVistaDias(false)}
-          onExiting={() => setVistaDias(true)}
-        >
+          onExiting={() => setVistaDias(true)}>
           <div className='flex flex-wrap justify-center items-center gap-4'>
             <div className='w-full flex justify-between place-items-center'>
               <label
                 htmlFor='plazo'
-                className='mr-2 border-b-2 border-teal-600'
-              >
+                className='mr-2 border-b-2 border-teal-600'>
                 Días de plazo
               </label>
               <div className='flex items-center'>
@@ -243,7 +236,7 @@ const CalcularFecha = ({ fechas }) => {
                   type='number'
                   className='w-36 text-center text-4xl font-bold p-2 text-pink-800 focus:outline-none'
                   value={plazoDias}
-                  onClick={ e=> e.target.select()}
+                  onClick={e => e.target.select()}
                   onChange={e => {
                     parseInt(e.target.value) <= 1000 &&
                     parseInt(e.target.value) >= -1000
@@ -261,15 +254,13 @@ const CalcularFecha = ({ fechas }) => {
                       plazoDias < 1000 && plazoDias > -1000
                         ? setPlazoDias(plazoDias + 1)
                         : setPlazoDias(0)
-                    }}
-                  >
+                    }}>
                     <svg
                       xmlns='http://www.w3.org/2000/svg'
                       className='h-6 w-6'
                       fill='none'
                       viewBox='0 0 24 24'
-                      stroke='currentColor'
-                    >
+                      stroke='currentColor'>
                       <path
                         strokeLinecap='round'
                         strokeLinejoin='round'
@@ -283,15 +274,13 @@ const CalcularFecha = ({ fechas }) => {
                       plazoDias < 1000 && plazoDias > -1000
                         ? setPlazoDias(plazoDias - 1)
                         : setPlazoDias(0)
-                    }}
-                  >
+                    }}>
                     <svg
                       xmlns='http://www.w3.org/2000/svg'
                       className='h-6 w-6'
                       fill='none'
                       viewBox='0 0 24 24'
-                      stroke='currentColor'
-                    >
+                      stroke='currentColor'>
                       <path
                         strokeLinecap='round'
                         strokeLinejoin='round'
@@ -306,8 +295,7 @@ const CalcularFecha = ({ fechas }) => {
             <div className='w-full flex flex-wrap justify-center shadow-xl place-items-center rounded-xl border text-white'>
               <label
                 htmlFor='fechaTope'
-                className='z-30 rounded-t-xl w-full text-center px-1 text-lg font-bold bg-teal-600 capitalize'
-              >
+                className='z-30 rounded-t-xl w-full text-center px-1 text-lg font-bold bg-teal-600 capitalize'>
                 Fecha Tope
               </label>
               <input
@@ -327,8 +315,7 @@ const CalcularFecha = ({ fechas }) => {
             <p
               className={`w-full ${
                 restaDias < 0 ? 'text-pink-800' : 'text-teal-700'
-              } font-bold text-center`}
-            >
+              } font-bold text-center`}>
               {isNaN(restaDias)
                 ? null
                 : restaDias === 0
@@ -357,14 +344,12 @@ const CalcularFecha = ({ fechas }) => {
           classNames='dias'
           mountOnEnter={true}
           unmountOnExit={true}
-          onExited={() => setVistaFecha(true)}
-        >
+          onExited={() => setVistaFecha(true)}>
           <div className='flex flex-wrap justify-center items-center gap-4'>
             <div className='w-full flex justify-between'>
               <label
                 htmlFor='fechaFin'
-                className='mr-3 border-b-2 border-teal-600'
-              >
+                className='mr-3 border-b-2 border-teal-600'>
                 Fecha fin
               </label>
               <input
