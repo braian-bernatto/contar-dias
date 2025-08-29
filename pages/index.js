@@ -68,7 +68,7 @@ export default function Home({ fechas }) {
         </span>
         <span className='text-gray-400'>{' | '}</span>
         <a
-          href='https://strapi-dias.bernatto.xyz/admin'
+          href='https://feriados-strapi.bernatto.com/admin'
           rel='noreferrer'
           target='_blank'>
           <svg
